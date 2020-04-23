@@ -15,13 +15,13 @@ Visualize your messaging data trends in [Tableau](https://www.tableau.com/)
 ## Extracting JSON messages
 
 1. Clone this repository:
-
+    ```
     git clone https://github.com/spencerng/messenger-analysis
-
+    ```
 2. Extract the `/messages` directory of the downloaded ZIP file into the repository directory
-3. Run the Python scripts, downloading dependencies as necessary:
-
+3. Run the Python scripts from this directory, downloading dependencies as necessary:
+    ```
     python3 json_extractor.py
     python3 json_parser.py
-
+    ```
 4. Open the Tableau workbook (`Messenger Analysis.twb`) to begin visualizing your data. If needed, select the `messages.json` file that was generated as your data source.
