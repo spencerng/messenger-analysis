@@ -62,7 +62,7 @@ def extract_data(main_folder, name="Spencer Ng", anonymity="none"):
             if partner not in names:
                 names.append(partner)
 
-        df = df.append(json_data["messages"], ignore_index=True)
+        df = pd.concat([df, pd.DataFrame(json_data["messages"])], ignore_index=True)
 
     df["timestamp_ms"] = pd.to_datetime(df["timestamp_ms"], unit="ms")
 
