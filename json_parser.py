@@ -59,13 +59,17 @@ def build_message_arr(dir):
             convo_name = root.split("\\" if IS_WINDOWS else "/")[-1]
 
             with open(src_file_path) as json_file:
+                print(src_file_path)
                 data = json.load(json_file)
-                try:
-                    for m in data["messages"]:
+                if "messages" not in data.keys():
+                    print("ERROR: Skipping entirely", src_file_path)
+                    continue
+                for m in data["messages"]:
+                    try:
                         m_dict = create_message(m, data["title"], len(data["participants"]))
                         messages.append(m_dict)
-                except KeyError:
-                    print("ERROR: Skipping message in", src_file_path)
+                    except KeyError:
+                        print("ERROR: Skipping message in", src_file_path)
     return messages
 
 
@@ -77,7 +81,7 @@ def main():
     message_arr += build_message_arr(f"{DATA_DIRECTORY}/json")
     
     for i, start_block in enumerate(range(0, len(message_arr), 200000)):
-        with open(f"college-years/messages{i}.json", "w+", encoding="utf-8") as text_file:
+        with open(f"{DATA_DIRECTORY}/messages{i}.json", "w+", encoding="utf-8") as text_file:
             json.dump(message_arr[start_block:start_block + 200000], text_file)
     
 

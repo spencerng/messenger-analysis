@@ -2,7 +2,7 @@ import json
 import os
 from shutil import copyfile
 
-DATA_DIRECTORY = "."
+DATA_DIRECTORY = "college-years/"
 IS_WINDOWS = True
 
 

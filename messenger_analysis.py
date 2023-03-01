@@ -8,6 +8,17 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
 
+# Number of convo initates for someone to appear on the analysis graph
+# Used to filter out people you don't often converse with
+INIT_THRESH = 10
+
+# We visualize only people who fall within the TOP_N people you talk to
+# in any given month
+TOP_N = 10
+
+# List of names to filter for on the graph. If empty, defaults to
+# the TOP_N criteria
+FILTER_LIST = []
 
 def extract_data(main_folder, name="Spencer Ng", anonymity="none"):
     raw_messages = defaultdict(list)
@@ -62,6 +73,7 @@ def extract_data(main_folder, name="Spencer Ng", anonymity="none"):
             if partner not in names:
                 names.append(partner)
 
+        
         df = pd.concat([df, pd.DataFrame(json_data["messages"])], ignore_index=True)
 
     df["timestamp_ms"] = pd.to_datetime(df["timestamp_ms"], unit="ms")
@@ -367,8 +379,9 @@ def plot_initiates(df, your_name, filter_names=set()):
             dms[dms.title == friend], friend, your_name
         )
 
-        if friend_init < 10 and you_init < 10:
+        if friend_init < INIT_THRESH and you_init < INIT_THRESH:
             continue
+
 
         if you_init > friend_init:
             print(friend, you_init, friend_init)
@@ -419,14 +432,18 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     dms, names = extract_data(args.data, args.name, anonymity=args.anonymize)
+    print(names)
     dms["month"] = dms["timestamp_ms"].apply(lambda x: "%d/%d" % (x.month, x.year))
 
     dms = dms.set_index("timestamp_ms")
 
-    filter_names = top_n_for_month(dms, 10)
+    if len(FILTER_LIST) == 0:
+        filter_names = top_n_for_month(dms, TOP_N)
+    else:
+        filter_names = FILTER_LIST
 
     plot_line_series(dms, top_n=1)
-    months_and_totals(dms, top_n=5)
+    months_and_totals(dms, top_n=TOP_N)
     message_imbalances_counts(dms)
     message_imbalances_words(dms)
     message_reacts(dms)

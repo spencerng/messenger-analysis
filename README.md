@@ -39,4 +39,4 @@ Visualize your messaging data trends in [Tableau](https://www.tableau.com/)
         --anonymize first
     ```
 
-    Graphs will display one at a time.
+    The `INIT_THRESH`, `FILTER_LIST`, and `TOP_N` variables can be customized in the code to filter out certain DM conversations. Graphs will display one at a time.
